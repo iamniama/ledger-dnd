@@ -87,7 +87,6 @@ class Dice:
         total = 0
         for x in lst_dice:
             dice_and_sides = x.split('d')
-            # print(dice_and_sides)
             if dice_and_sides[0].isdigit():
                 dice, sides = [int(y) for y in dice_and_sides]
             else:
