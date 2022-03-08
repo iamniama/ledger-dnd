@@ -105,6 +105,8 @@ if __name__ == "__main__":
     print("\n****************Natural Language Roll***************************")
     print("Command: '1d8 2d6 +2 +1 -1'")
     print(Dice.text_roll("1d8 2d6 +2 +1 -1"))
+    print("***********************************************")
+    print("\t\t\t\tStat Rolls")
     for _ in range(4):
         print("***********************************************")
         print(*Dice.roll_stats(), sep="\n")
