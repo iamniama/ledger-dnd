@@ -15,9 +15,6 @@ class Dice:
             ''', re.X)
     mod_rex = re.compile(r'[+-][0-9]+\b')
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def roll(dice, sides, modifiers=0):
         """
@@ -26,8 +23,7 @@ class Dice:
         :param dice: how many random nums to keep
         :param sides: upper limit of individual randoms
         :param modifiers: a positive or negative int that affects the value of the roll, defaults to 0
-        :return: dict with the number of dice, number of sides, values of each individual die, the value of
-        modifier, and an aggregated total of the roll
+        :return: int, sum of dice rolls and modifiers
         """
         return sum(random.choices([random.randint(1,sides) for x in range(Dice.dice_pool * dice)], k=dice)) + modifiers
 
@@ -35,8 +31,8 @@ class Dice:
     def text_roll(cmd_str):
         """
         text_roll interprets a natural language dice syntax, such as "4d4 +4" or "1d8
-        :param cmd_str:
-        :return:
+        :param cmd_str: text input in the format of a D&D dice roll, ie "3d6 + 3" or "1d8 +2d6 +3 +1 -1
+        :return: output of multi_roll with parameters extracted from cmd_str
         """
         d_info = Dice.dice_rex.findall(cmd_str)
         modifiers = [int(x) for x in list(Dice.mod_rex.findall(cmd_str))]
@@ -48,10 +44,10 @@ class Dice:
         Rolls a given number of six sided dice, and keeps the highest (default 3) values
         :param dice: how many total d6 to roll, defaults to 4 per 5E rules
         :param highest: how many dice to keep, defaults to 3 per 5E rules
-        :return: dict with list of individual kept dice values and the total of the kept dice
+        :return: int, sum of kept dice
         """
         rolls = [Dice.roll(1, 6) for x in range(dice)]
-        return sum(list(reversed(sorted(rolls)))[:3])
+        return sum(list(reversed(sorted(rolls)))[:highest])
 
     @staticmethod
     def roll_stats():
