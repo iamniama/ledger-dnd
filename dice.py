@@ -38,11 +38,8 @@ class Dice:
         :param cmd_str:
         :return:
         """
-        dice_info = Dice.dice_rex.search(cmd_str)
         d_info = Dice.dice_rex.findall(cmd_str)
-        # print([x[0] for x in d_info])
         modifiers = [int(x) for x in list(Dice.mod_rex.findall(cmd_str))]
-        # return Dice.roll(1 if not dice_info['num_dice'].isdigit() else int(dice_info['num_dice']), int(dice_info['sides']), sum(modifiers))
         return Dice.multi_roll([a[0] for a in d_info], sum(modifiers))
 
     @staticmethod
