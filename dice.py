@@ -5,9 +5,9 @@ import re
 class Dice:
     """
     A set of static methods to accomplish various dice rolls using the builtin random library.
-    Rather than futz with other random libraries, I decided that the base method (roll) should
+    Rather than futz with other random libraries, I initially decided that the base method (roll) should
     generate a significant number of rolls (1000) and select random values from among them based
-    on the number of dice
+    on the number of dice, but decided to scale the pool to dice_pool (defaults to 50) * number of dice.
     """
     dice_pool = 50
     dice_rex = re.compile(r'''
