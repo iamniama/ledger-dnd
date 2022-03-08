@@ -13,7 +13,7 @@ class Dice:
     dice_rex = re.compile(r'''
                 (?P<base_roll>(?P<num_dice>[0-9]*)d(?P<sides>[0-9]{,3}))  # get the base roll, dice, and sides
             ''', re.X)
-    mod_rex = re.compile(r'[+-][0-9]+')
+    mod_rex = re.compile(r'[+-][0-9]+\b')
 
     def __init__(self):
         pass
@@ -108,8 +108,8 @@ if __name__ == "__main__":
     print("\n****************Multi Roll d8 and 2d6***************************")
     print(Dice.multi_roll(['1d8', '2d6'], 5))
     print("\n****************Natural Language Roll***************************")
-    print("Command: 'd8 2d6 +2 +1 -1'")
-    print(Dice.text_roll("d8 2d6 +2 +1 -1"))
+    print("Command: 'd8 +2 +1 +2d6 -1'")
+    print(Dice.text_roll("d8 +2 +1 +2d6 -1"))
     print("***********************************************")
     print("\t\t\t\tStat Rolls")
     for _ in range(4):
