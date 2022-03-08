@@ -86,7 +86,13 @@ class Dice:
         """
         total = 0
         for x in lst_dice:
-            dice, sides = [int(y) for y in x.split('d')]
+            dice_and_sides = x.split('d')
+            # print(dice_and_sides)
+            if dice_and_sides[0].isdigit():
+                dice, sides = [int(y) for y in dice_and_sides]
+            else:
+                dice = 1
+                sides = int(dice_and_sides[1])
             total += Dice.roll(dice, sides)
         return total + modifiers
 
@@ -103,8 +109,8 @@ if __name__ == "__main__":
     print("\n****************Multi Roll d8 and 2d6***************************")
     print(Dice.multi_roll(['1d8', '2d6'], 5))
     print("\n****************Natural Language Roll***************************")
-    print("Command: '1d8 2d6 +2 +1 -1'")
-    print(Dice.text_roll("1d8 2d6 +2 +1 -1"))
+    print("Command: 'd8 2d6 +2 +1 -1'")
+    print(Dice.text_roll("d8 2d6 +2 +1 -1"))
     print("***********************************************")
     print("\t\t\t\tStat Rolls")
     for _ in range(4):
