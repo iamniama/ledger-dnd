@@ -4,11 +4,15 @@ class Weapon:
         self.damage_type = damage_type
         self.damage = damage
         self.bonuses = bonuses
+        self.description = ""
 
     def __str__(self):
         return (
             f'Name: {self.name}, {self.damage}{"+"+str(self.bonuses) if self.bonuses != 0 else ""} {self.damage_type}'
         )
+
+    def set_description(self, desc):
+        self.description = desc
 
 
 if __name__ == "__main__":
