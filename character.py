@@ -23,7 +23,7 @@ class Character:
 
     def __str__(self):
         return (f'{self.name}\n\n'
-                f'Armor Class: {self.hp}\n'
+                f'Armor Class: {self.ac}\n'
                 f'Hit Points: {self.hp}\n'
                 f'Equipped Weapon: {self.default_weapon.name}\n'
                 f'Weapon Damage: {self.default_weapon.damage} +{self.str_mod}\n'
@@ -45,10 +45,11 @@ class Character:
     def add_item(self, item):
         self.inventory.append(item)
 
-    def attack(self, other):
-        attack_roll = Dice.text_roll('1d20')
+    def attack(self, other, attack_roll=Dice.text_roll('1d20')):
         if attack_roll + self.str_mod + self.default_weapon.bonuses >= other.ac:
-            return f"{self.name} hits {other.name} for {Dice.text_roll(self.default_weapon.damage) * 2 + self.str_mod + self.default_weapon.bonuses if attack_roll != 20 else Dice.text_roll(self.default_weapon.damage) + self.str_mod + self.default_weapon.bonuses} damage"
+            dmg = Dice.text_roll(self.default_weapon.damage) * 2 + self.str_mod + self.default_weapon.bonuses if attack_roll != 20 else Dice.text_roll(self.default_weapon.damage) + self.str_mod + self.default_weapon.bonuses
+            other.hp -= dmg
+            return f"{self.name} hits {other.name} for {dmg} {self.default_weapon.damage_type} damage"
         return f"{self.name} MISSES {other.name}"
 
 
@@ -58,6 +59,11 @@ if __name__ == "__main__":
     thing1.set_default_weapon(1)
     thing2 = Character("thing2")
     thing2.add_item("300gp")
+    print("++++++++++++++++++++++++++++++++++++++++++")
     print(thing1)
+    print("++++++++++++++++++++++++++++++++++++++++++")
     print(thing2)
+    print("++++++++++++++++++++++++++++++++++++++++++")
     print(thing1.attack(thing2))
+    print("++++++++++++++++++++++++++++++++++++++++++")
+    print(thing2)
