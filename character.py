@@ -14,6 +14,7 @@ class Character:
         self.ac = ac
         self.speed = speed
         self.hp = Dice.text_roll(hp)
+        self.hit_dice = int(hp.split('d')[0])
         self.advantage = False
         self.disadvantage = False
         self.inventory = []
@@ -25,6 +26,7 @@ class Character:
         return (f'{self.name}\n\n'
                 f'Armor Class: {self.ac}\n'
                 f'Hit Points: {self.hp}\n'
+                f'Hit Dice: {self.hit_dice}\n'
                 f'Equipped Weapon: {self.default_weapon.name}\n'
                 f'Weapon Damage: {self.default_weapon.damage} +{self.str_mod}\n'
                 f'Movement Speed: {self.speed}\n'
