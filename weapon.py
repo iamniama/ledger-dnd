@@ -1,10 +1,11 @@
 import json
 
 class Weapon:
-    def __init__(self, name, damage_type, damage, bonuses=0):
+    def __init__(self, name, damage_type, damage, crit_range=20, bonuses=0):
         self.name = name
         self.damage_type = damage_type
         self.damage = damage
+        self.crit_range = crit_range
         self.bonuses = bonuses
         self.description = ""
 

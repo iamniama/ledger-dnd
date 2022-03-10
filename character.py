@@ -47,11 +47,15 @@ class Character:
     def add_item(self, item):
         self.inventory.append(item)
 
+# TODO: Add a method to calculate damage, probably in Dice
+# TODO: need to split out the damage calculation into it's own method
     def attack(self, other, attack_roll=Dice.text_roll('1d20')):
         if attack_roll + self.str_mod + self.default_weapon.bonuses >= other.ac:
-            dmg = Dice.text_roll(self.default_weapon.damage) * 2 + self.str_mod + self.default_weapon.bonuses if attack_roll != 20 else Dice.text_roll(self.default_weapon.damage) + self.str_mod + self.default_weapon.bonuses
+            dmg = Dice.roll_damage(self.default_weapon.damage, attack_roll >= self.default_weapon.crit_range) \
+                  + self.str_mod + self.default_weapon.bonuses
             other.hp -= dmg
-            return f"{self.name} hits {other.name} for {dmg} {self.default_weapon.damage_type} damage"
+            return (f"{self.name} {'critically ' if attack_roll >= self.default_weapon.crit_range else ''}hits!\n"
+                    f"{other.name} takes {dmg} {self.default_weapon.damage_type} damage")
         return f"{self.name} MISSES {other.name}"
 
 

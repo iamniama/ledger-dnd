@@ -20,9 +20,9 @@ class Dice:
         """
         The core of the Dice library, roll generates random numbers (scaled based on the number of dice) in the given
         range (sides) and selects a given number (dice) of values to return.
-        :param dice: how many random nums to keep
-        :param sides: upper limit of individual randoms
-        :param modifiers: a positive or negative int that affects the value of the roll, defaults to 0
+        :param dice: int, how many random nums to keep
+        :param sides: int, upper limit of individual randoms
+        :param modifiers: int, a positive or negative int that affects the value of the roll, defaults to 0
         :return: int, sum of dice rolls and modifiers
         """
         return sum(random.choices([random.randint(1,sides) for x in range(Dice.dice_pool * dice)], k=dice)) + modifiers
@@ -31,8 +31,8 @@ class Dice:
     def text_roll(cmd_str):
         """
         text_roll interprets a natural language dice syntax, such as "4d4 +4" or "1d8
-        :param cmd_str: text input in the format of a D&D dice roll, ie "3d6 + 3" or "1d8 +2d6 +3 +1 -1
-        :return: output of multi_roll with parameters extracted from cmd_str
+        :param cmd_str: str, text input in the format of a D&D dice roll, ie "3d6 + 3" or "1d8 +2d6 +3 +1 -1
+        :return: int, output of multi_roll with parameters extracted from cmd_str
         """
         d_info = Dice.dice_rex.findall(cmd_str)
         modifiers = [int(x) for x in list(Dice.mod_rex.findall(cmd_str))]
@@ -70,6 +70,19 @@ class Dice:
         if disadvantage:
             return min([Dice.roll(1, 20, modifiers) for x in range(2)])
         return max([Dice.roll(1, 20, modifiers) for x in range(2)])
+
+    @staticmethod
+    def roll_damage(cmd_str, critical=False):
+        """
+        roll_damage allows damage calculation for an attack or spell with a possible critical success that
+        doubles the base roll
+        :param cmd_str: str,text command, identical to what would be provided to text_roll
+        :param critical: bool, was the attack a critical success
+        :return: int, result of dice roll
+        """
+        if critical:
+            return Dice.text_roll(cmd_str) * 2
+        return Dice.text_roll(cmd_str)
 
     @staticmethod
     def multi_roll(lst_dice, modifiers=0):
