@@ -16,10 +16,11 @@ class Character:
         self.hp = Dice.text_roll(hp)
         self.max_hp = self.hp
         self.hit_dice = int(hp.split('d')[0])
+        self.hit_dice_total = self.hit_dice
+        self.hit_die = int(hp.split('d')[1])
         self.advantage = False
         self.disadvantage = False
         self.inventory = []
-        # self.weapons = [{'name': 'fist', 'damage': '1d4', 'type': 'bludgeoning'}]
         self.weapons = [Weapon('fist', 'bludgeoning', '1d4')]
         self.default_weapon = self.weapons[0]
         self.alive = True
@@ -77,6 +78,18 @@ class Character:
             else:
                 self.hp = self.max_hp
 
+    def use_hit_dice(self, num_dice):
+        if num_dice < self.hit_dice:
+            self.recover_health(Dice.text_roll(f'{num_dice}d{self.hit_die}'))
+        else:
+            self.recover_health(Dice.text_roll(f'{self.hit_dice}d{self.hit_die}'))
+
+    def recover_hit_dice(self, num_dice):
+        if self.hit_dice + num_dice > self.hit_dice_total:
+            self.hit_dice = self.hit_dice_total
+        else:
+            self.hit_dice += num_dice
+
 
 if __name__ == "__main__":
     thing1 = Character("thing1", str_mod=2)
@@ -95,3 +108,7 @@ if __name__ == "__main__":
     print("++++++++++++++++++++++++++++++++++++++++++")
     thing2.recover_health(Dice.text_roll('1d8'))
     print(thing2)
+    if 0 < thing2.hp < thing2.max_hp:
+        print(f"{thing2.name} binds wounds...\n")
+        thing2.use_hit_dice(1)
+        print(thing2)
