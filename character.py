@@ -14,6 +14,7 @@ class Character:
         self.ac = ac
         self.speed = speed
         self.hp = Dice.text_roll(hp)
+        self.max_hp = self.hp
         self.hit_dice = int(hp.split('d')[0])
         self.advantage = False
         self.disadvantage = False
@@ -21,11 +22,15 @@ class Character:
         # self.weapons = [{'name': 'fist', 'damage': '1d4', 'type': 'bludgeoning'}]
         self.weapons = [Weapon('fist', 'bludgeoning', '1d4')]
         self.default_weapon = self.weapons[0]
+        self.alive = True
+        self.unconscious = False
 
     def __str__(self):
         return (f'{self.name}\n\n'
+                f'Alive: {self.alive}\n'
+                f'Conscious: {not self.unconscious}\n'
                 f'Armor Class: {self.ac}\n'
-                f'Hit Points: {self.hp}\n'
+                f'Hit Points: {self.hp}/{self.max_hp}\n'
                 f'Hit Dice: {self.hit_dice}\n'
                 f'Equipped Weapon: {self.default_weapon.name}\n'
                 f'Weapon Damage: {self.default_weapon.damage} +{self.str_mod}\n'
@@ -51,10 +56,26 @@ class Character:
         if attack_roll + self.str_mod + self.default_weapon.bonuses >= other.ac:
             dmg = Dice.roll_damage(self.default_weapon.damage, attack_roll >= self.default_weapon.crit_range) \
                   + self.str_mod + self.default_weapon.bonuses
-            other.hp -= dmg
+            other.take_damage(dmg)
             return (f"{self.name} {'critically ' if attack_roll >= self.default_weapon.crit_range else ''}hits!\n"
                     f"{other.name} takes {dmg} {self.default_weapon.damage_type} damage")
         return f"{self.name} MISSES {other.name}"
+
+    def take_damage(self, dmg):
+        self.hp -= dmg
+        if -10 < self.hp < 1:
+            self.unconscious = True
+        elif self.hp <= -10:
+            self.alive = False
+
+    def recover_health(self, healing):
+        if (-10 < self.hp < 1) and (self.hp + healing >= 1):
+            self.unconscious = False
+        if self.alive:
+            if healing + self.hp <= self.max_hp:
+                self.hp += healing
+            else:
+                self.hp = self.max_hp
 
 
 if __name__ == "__main__":
@@ -70,4 +91,7 @@ if __name__ == "__main__":
     print("++++++++++++++++++++++++++++++++++++++++++")
     print(thing1.attack(thing2))
     print("++++++++++++++++++++++++++++++++++++++++++")
+    print(thing2)
+    print("++++++++++++++++++++++++++++++++++++++++++")
+    thing2.recover_health(Dice.text_roll('1d8'))
     print(thing2)
