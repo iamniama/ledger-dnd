@@ -142,8 +142,10 @@ class Character:
         if self.alive and not self.unconscious and self.hit_dice > 0:
             if num_dice < self.hit_dice:
                 self.recover_health(Dice.text_roll(f'{num_dice}d{self.hit_die}'))
+                self.hit_dice -= num_dice
             else:
                 self.recover_health(Dice.text_roll(f'{self.hit_dice}d{self.hit_die}'))
+                self.hit_dice = 0
 
     def recover_hit_dice(self, num_dice):
         """
