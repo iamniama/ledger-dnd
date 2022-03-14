@@ -125,4 +125,6 @@ if __name__ == "__main__":
     #     print("***********************************************")
     #     print(*Dice.roll_stats(), sep="\n")
     # print("***********************************************")
-    print(*Dice.roll_stats(), sep="\n")
+    for _ in range(4):
+        print("+++++++++++++++++++++++++++++++++++++++++++++++")
+        print(*Dice.roll_stats(), sep="\n")
